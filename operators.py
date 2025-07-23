@@ -22,8 +22,8 @@ class THRIG_OT_AppendMain(bpy.types.Operator):
     def execute(self, context):
         try:
             bpy.ops.wm.append(
-                filepath=os.path.join(get_asset_path("TheRig.1.8.blend"), "Collection", "TheRig(Append)"),
-                directory=os.path.join(get_asset_path("TheRig.1.8.blend"), "Collection"),
+                filepath=os.path.join(get_asset_path("TheRig.blend"), "Collection", "TheRig(Append)"),
+                directory=os.path.join(get_asset_path("TheRig.blend"), "Collection"),
                 filename="TheRig(Append)"
             )
             return {'FINISHED'}
@@ -124,8 +124,8 @@ def menu_func_armature(self, context):
 
 def menu_func_root(self, context):
     self.layout.separator()
-    self.layout.operator(THRIG_OT_AppendMain.bl_idname, text="THE RIG [Metla]", icon='OUTLINER_OB_ARMATURE')
-    self.layout.operator(THPLUSH_OT_AppendPlush.bl_idname, text="THE PLUSH [Metla]", icon='OUTLINER_OB_ARMATURE')
+    self.layout.operator(THRIG_OT_AppendMain.bl_idname, text="THE RIG", icon='OUTLINER_OB_ARMATURE')
+    self.layout.operator(THPLUSH_OT_AppendPlush.bl_idname, text="THE PLUSH", icon='OUTLINER_OB_ARMATURE')
 
 def register():
     bpy.utils.register_class(THRIG_OT_AppendMain)
