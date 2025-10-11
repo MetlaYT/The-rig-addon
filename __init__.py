@@ -4,7 +4,7 @@ from . import operators, ui
 bl_info = {
     "name": "The Rig addon",
     "author": "Metla",
-    "version": (1, 0, 2),
+    "version": (1, 0, 3),
     "blender": (4, 5, 0),
     "location": "Shift+A > Armature, View3D > Sidebar",
     "description": "An addon to easily use The rig and you can easily use The Plush from the author TheRatmir ",
