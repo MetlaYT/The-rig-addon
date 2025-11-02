@@ -1,1 +1,1 @@
-# The-rig-addon-private
+# The-rig-addon
