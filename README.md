@@ -11,6 +11,8 @@
 
 ## 📦 Доступные риги
 
+<img width="1376" height="928" alt="Red" src="https://github.com/user-attachments/assets/270dfdc3-c582-4d5d-bd04-ddba119fa4f8" />
+
 | Риг | Описание |
 |-----|----------|
 | **THE RIG** | Основной Minecraft персонаж |
