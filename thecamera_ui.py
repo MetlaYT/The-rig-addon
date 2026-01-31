@@ -1,17 +1,17 @@
-# therigmod_ui.py - UI панели для TheRig Modify/Zealum Edit
+# thecamera_ui.py - UI панели для TheCamera
 # RigId: TODO - ожидаем список от Метлы
 import bpy
 
-RIG_ID = "TheRigMA"  # Временный ID, заменим позже
+RIG_ID = "TheCameraCA"  # Временный ID, заменим позже
 
 
-class THERIGMOD_PT_MainPanel(bpy.types.Panel):
-    """Главная панель для TheRig Modify"""
-    bl_label = "TheRig Modify"
-    bl_idname = "THERIGMOD_PT_main"
+class THECAMERA_PT_MainPanel(bpy.types.Panel):
+    """Главная панель для TheCamera"""
+    bl_label = "TheCamera"
+    bl_idname = "THECAMERA_PT_main"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = "TheRigMod"
+    bl_category = "TheCamera"
 
     @classmethod
     def poll(cls, context):
@@ -23,11 +23,11 @@ class THERIGMOD_PT_MainPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         rig = context.active_object
-        layout.label(text=f"Active: {rig.name}", icon='ARMATURE_DATA')
+        layout.label(text=f"Active: {rig.name}", icon='CAMERA_DATA')
 
 
 classes = [
-    THERIGMOD_PT_MainPanel,
+    THECAMERA_PT_MainPanel,
 ]
 
 

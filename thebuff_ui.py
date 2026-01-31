@@ -1,17 +1,17 @@
-# therigmod_ui.py - UI панели для TheRig Modify/Zealum Edit
+# thebuff_ui.py - UI панели для TheBuff
 # RigId: TODO - ожидаем список от Метлы
 import bpy
 
-RIG_ID = "TheRigMA"  # Временный ID, заменим позже
+RIG_ID = "TheBuffA"  # Временный ID, заменим позже
 
 
-class THERIGMOD_PT_MainPanel(bpy.types.Panel):
-    """Главная панель для TheRig Modify"""
-    bl_label = "TheRig Modify"
-    bl_idname = "THERIGMOD_PT_main"
+class THEBUFF_PT_MainPanel(bpy.types.Panel):
+    """Главная панель для TheBuff"""
+    bl_label = "TheBuff"
+    bl_idname = "THEBUFF_PT_main"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = "TheRigMod"
+    bl_category = "TheBuff"
 
     @classmethod
     def poll(cls, context):
@@ -27,7 +27,7 @@ class THERIGMOD_PT_MainPanel(bpy.types.Panel):
 
 
 classes = [
-    THERIGMOD_PT_MainPanel,
+    THEBUFF_PT_MainPanel,
 ]
 
 
