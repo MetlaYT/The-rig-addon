@@ -1,57 +1,57 @@
 # ![minecraft_title](https://github.com/user-attachments/assets/9c8e1cf7-0505-4c16-b262-ee189505c650)
 
-> 🎮 Blender аддон для удобной работы с Minecraft ригами от [TheRatmir](https://theratmir.github.io/TheRatmir-Portfolio/)
+> 🎮 Blender addon for convenient work with Minecraft rigs by [TheRatmir](https://theratmir.github.io/TheRatmir-Portfolio/)
 
 ---
 
-## ✨ Возможности
+## ✨ Features
 
-- 🧍 **Быстрое добавление ригов** 
-- 👁️ **Управление лицом**
+- 🧍 **Quick rig addition** 
+- 👁️ **Face control**
 
-## 📦 Доступные риги
+## 📦 Available Rigs
 
 <img width="1376" height="928" alt="Red" src="https://github.com/user-attachments/assets/270dfdc3-c582-4d5d-bd04-ddba119fa4f8" />
 
-| Риг | Описание |
+| Rig | Description |
 |-----|----------|
-| **THE RIG** | Основной риг |
-| **THE RIG'A** | Модикация основгоно рига |
-| **THE PLUSH** | Плюшевый риг |
-| **THE SIMPLE** | Barebones риг |
-| **THE BUFF** | Мускулистый риг |
-| **THE CAMERA** | Риг Камера |
+| **THE RIG** | Main rig |
+| **THE RIG'A** | Modified version of the main rig |
+| **THE PLUSH** | Plush rig |
+| **THE SIMPLE** | Barebones rig |
+| **THE BUFF** | Muscular rig |
+| **THE CAMERA** | Camera rig |
 
-## 🔧 Установка
+## 🔧 Installation
 
-1. Скачайте последнюю версию аддона
-2. В Blender: `Edit > Preferences > Add-ons > Install...`
-3. Выберите скачанный `.zip` файл
-4. Активируйте аддон "The Rig addon"
+1. Download the latest version of the addon
+2. In Blender: `Edit > Preferences > Add-ons > Install...`
+3. Select the downloaded `.zip` file
+4. Activate the addon "The Rig addon"
 
-## 📋 Информация
+## 📋 Information
 
-- **Blender:** 4.5.0 или выше
-- **Автор Аддона:** Metla
-- **Автор Ригов:** TheRatmir
-- **Автор Модифицырованого рига: Zealum**
-- **Версия:** 2.0.0
+- **Blender:** 4.5.0 or higher
+- **Addon Author:** Metla
+- **Rig Author:** TheRatmir
+- **Modified Rig Author:** Zealum
+- **Version:** 2.0.0
 
-## 🎯 Использование
+## 🎯 Usage
 
-### Добавление персонажей
-- `Shift+A` — выберите нужного персонажа
-
-
+### Adding Characters
+- `Shift+A` — select the desired character
 
 
-## 🙏 Благодарности
 
-- [TheRatmir](https://theratmir.github.io/TheRatmir-Portfolio/) — автор оригинальных ригов
-- [Zealum](https://t.me/Zealum2) — автор модифицированого рига
+
+## 🙏 Acknowledgments
+
+- [TheRatmir](https://theratmir.github.io/TheRatmir-Portfolio/) — author of the original rigs
+- [Zealum](https://t.me/Zealum2) — author of the modified rig
 
 ---
 
 <p align="center">
-  <i>Я хочу пиццы</i>
+  <i>I want pizza</i>
 </p>
