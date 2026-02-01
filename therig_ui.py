@@ -1,15 +1,12 @@
-# therig_ui.py - UI panels for TheRig
 import bpy
 import os
 from bpy_extras.io_utils import ImportHelper
 
-# RigId for this file
 RIG_ID = "TheRigA"
-SKIN_TEXTURE_NAME = "Skin"  # Base name for skin texture
+SKIN_TEXTURE_NAME = "Skin"
 
 
 def is_this_rig(context):
-    """Check if active object is the correct rig by RigId"""
     obj = context.active_object
     if obj and obj.type == 'ARMATURE':
         return obj.data.get("RigId") == RIG_ID
@@ -17,29 +14,89 @@ def is_this_rig(context):
 
 
 def get_face_color_bone(context):
-    """Get Face Color bone"""
     rig = context.active_object
     if rig and rig.type == 'ARMATURE':
         return rig.pose.bones.get("Face Color")
     return None
 
 
+def is_face_enabled(context):
+    bone = get_face_color_bone(context)
+    if bone:
+        face_off = bone.get("01_Face Off", 0)
+        return face_off == 0 or face_off == False
+    return True
+
+
 def get_head_settings_bone(context):
-    """Get Head_Settings bone"""
     rig = context.active_object
     if rig and rig.type == 'ARMATURE':
         return rig.pose.bones.get("Head_Settings")
     return None
 
 
+def get_body_settings_bone(context):
+    rig = context.active_object
+    if rig and rig.type == 'ARMATURE':
+        return rig.pose.bones.get("Body_Settings")
+    return None
+
+
+def get_r_arm_settings_bone(context):
+    rig = context.active_object
+    if rig and rig.type == 'ARMATURE':
+        return rig.pose.bones.get("R_Arm_Settings")
+    return None
+
+
+def get_l_arm_settings_bone(context):
+    rig = context.active_object
+    if rig and rig.type == 'ARMATURE':
+        return rig.pose.bones.get("L_Arm_Settings")
+    return None
+
+
+def get_r_leg_settings_bone(context):
+    rig = context.active_object
+    if rig and rig.type == 'ARMATURE':
+        return rig.pose.bones.get("R_Leg_Settings")
+    return None
+
+
+def get_l_leg_settings_bone(context):
+    rig = context.active_object
+    if rig and rig.type == 'ARMATURE':
+        return rig.pose.bones.get("L_Leg_Settings")
+    return None
+
+
+def get_armor_bone(context):
+    rig = context.active_object
+    if rig and rig.type == 'ARMATURE':
+        return rig.pose.bones.get("Armor")
+    return None
+
+
+def get_taper_bone(context):
+    rig = context.active_object
+    if rig and rig.type == 'ARMATURE':
+        return rig.pose.bones.get("Taper")
+    return None
+
+
+def get_therig_bone(context):
+    rig = context.active_object
+    if rig and rig.type == 'ARMATURE':
+        return rig.pose.bones.get("TheRig")
+    return None
+
+
 def get_icon(icon_name):
-    """Get icon from preview collection"""
     from . import operators
     return operators.get_icon(icon_name)
 
 
 def find_skin_texture(rig):
-    """Find skin texture for this rig"""
     for child in rig.children:
         if child.type == 'MESH':
             for mat in child.data.materials:
@@ -52,7 +109,6 @@ def find_skin_texture(rig):
 
 
 def count_rigs_using_texture(texture):
-    """Count how many rigs use this texture"""
     count = 0
     for obj in bpy.data.objects:
         if obj.type == 'ARMATURE' and obj.data.get("RigId") == RIG_ID:
@@ -62,19 +118,12 @@ def count_rigs_using_texture(texture):
     return count
 
 
-# ===== SKIN CHANGE OPERATOR =====
-# ===== DOWNLOAD SKIN BY USERNAME =====
 class THERIG_OT_DownloadSkin(bpy.types.Operator):
-    """Download skin by Minecraft username"""
     bl_idname = "therig.download_skin"
     bl_label = "Download Skin by Username"
     bl_options = {'REGISTER', 'UNDO'}
     
-    username: bpy.props.StringProperty(
-        name="Username",
-        description="Minecraft username",
-        default=""
-    )
+    username: bpy.props.StringProperty(name="Username", description="Minecraft username", default="")
     
     @classmethod
     def poll(cls, context):
@@ -102,7 +151,6 @@ class THERIG_OT_DownloadSkin(bpy.types.Operator):
             self.report({'ERROR'}, "No skin texture found on rig!")
             return {'CANCELLED'}
         
-        # Check if multiple rigs use this texture
         if count_rigs_using_texture(texture) > 1:
             new_texture = texture.copy()
             new_texture.name = f"{SKIN_TEXTURE_NAME}_{rig.name}"
@@ -115,18 +163,14 @@ class THERIG_OT_DownloadSkin(bpy.types.Operator):
                                     node.image = new_texture
             texture = new_texture
         
-        # Download skin from Minotar API
         url = f"https://minotar.net/skin/{self.username}"
         
         try:
-            # Create temp file
             temp_path = os.path.join(tempfile.gettempdir(), f"{self.username}_skin.png")
             urllib.request.urlretrieve(url, temp_path)
             
-            # Load downloaded image
             new_image = bpy.data.images.load(temp_path)
             
-            # Check size and copy pixels
             if texture.size[0] == new_image.size[0] and texture.size[1] == new_image.size[1]:
                 texture.pixels[:] = new_image.pixels[:]
                 texture.update()
@@ -137,7 +181,6 @@ class THERIG_OT_DownloadSkin(bpy.types.Operator):
                 bpy.data.images.remove(new_image)
                 return {'CANCELLED'}
             
-            # Cleanup temp file
             if os.path.exists(temp_path):
                 os.remove(temp_path)
                 
@@ -149,7 +192,6 @@ class THERIG_OT_DownloadSkin(bpy.types.Operator):
 
 
 class THERIG_OT_ChangeSkin(bpy.types.Operator, ImportHelper):
-    """Change skin texture"""
     bl_idname = "therig.change_skin"
     bl_label = "Change Skin"
     bl_options = {'REGISTER', 'UNDO'}
@@ -168,13 +210,10 @@ class THERIG_OT_ChangeSkin(bpy.types.Operator, ImportHelper):
             self.report({'ERROR'}, "No skin texture found on rig!")
             return {'CANCELLED'}
         
-        # Check if multiple rigs use this texture
         if count_rigs_using_texture(texture) > 1:
-            # Make a copy for this rig
             new_texture = texture.copy()
             new_texture.name = f"{SKIN_TEXTURE_NAME}_{rig.name}"
             
-            # Update material to use new texture
             for child in rig.children:
                 if child.type == 'MESH':
                     for mat in child.data.materials:
@@ -184,11 +223,9 @@ class THERIG_OT_ChangeSkin(bpy.types.Operator, ImportHelper):
                                     node.image = new_texture
             texture = new_texture
         
-        # Load new image
         try:
             new_image = bpy.data.images.load(self.filepath)
             
-            # Copy pixels to existing texture (keeps name)
             if texture.size[0] == new_image.size[0] and texture.size[1] == new_image.size[1]:
                 texture.pixels[:] = new_image.pixels[:]
                 texture.update()
@@ -207,7 +244,6 @@ class THERIG_OT_ChangeSkin(bpy.types.Operator, ImportHelper):
 
 
 class THERIG_PT_MainPanel(bpy.types.Panel):
-    """Main panel for TheRig"""
     bl_label = "TheRig"
     bl_idname = "THERIG_PT_main"
     bl_space_type = 'VIEW_3D'
@@ -221,7 +257,6 @@ class THERIG_PT_MainPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         
-        # Info
         box = layout.box()
         icon_id = get_icon('therigicon')
         if icon_id:
@@ -232,9 +267,7 @@ class THERIG_PT_MainPanel(bpy.types.Panel):
         box.operator("wm.url_open", text="Portfolio", icon='URL').url = "https://theratmir.github.io/TheRatmir-Portfolio/"
 
 
-# ===== SKIN PANEL =====
 class THERIG_PT_SkinPanel(bpy.types.Panel):
-    """Skin settings panel"""
     bl_label = "Skin"
     bl_idname = "THERIG_PT_skin"
     bl_space_type = 'VIEW_3D'
@@ -261,7 +294,6 @@ class THERIG_PT_SkinPanel(bpy.types.Panel):
 
 
 class THERIG_PT_FacePanel(bpy.types.Panel):
-    """Face settings panel"""
     bl_label = "Face"
     bl_idname = "THERIG_PT_face"
     bl_space_type = 'VIEW_3D'
@@ -275,12 +307,14 @@ class THERIG_PT_FacePanel(bpy.types.Panel):
         return is_this_rig(context) and get_face_color_bone(context)
 
     def draw(self, context):
-        pass  # Content in subpanels
+        layout = self.layout
+        bone = get_face_color_bone(context)
+        
+        if bone and "01_Face Off" in bone:
+            layout.prop(bone, '["01_Face Off"]', text="Face Off", toggle=True)
 
 
-# ===== EYE (Sclera) =====
 class THERIG_PT_FaceEye(bpy.types.Panel):
-    """Eye sclera settings"""
     bl_label = "Eye"
     bl_idname = "THERIG_PT_face_eye"
     bl_space_type = 'VIEW_3D'
@@ -291,32 +325,28 @@ class THERIG_PT_FaceEye(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        return is_this_rig(context) and get_face_color_bone(context)
+        return is_this_rig(context) and get_face_color_bone(context) and is_face_enabled(context)
 
     def draw(self, context):
         layout = self.layout
         bone = get_face_color_bone(context)
         
-        # Headers
         row = layout.row()
         row.label(text="Right")
         row.label(text="Left")
         
-        # On/Off
         row = layout.row()
         if "17_Right Eye" in bone:
             row.prop(bone, '["17_Right Eye"]', text="On/Off")
         if "20_Left Eye" in bone:
             row.prop(bone, '["20_Left Eye"]', text="On/Off")
         
-        # Color1
         row = layout.row()
         if "18_Right Eye Color1" in bone:
             row.prop(bone, '["18_Right Eye Color1"]', text="")
         if "21_Left Eye Color1" in bone:
             row.prop(bone, '["21_Left Eye Color1"]', text="")
         
-        # Color2
         row = layout.row()
         if "19_Right Eye Color2" in bone:
             row.prop(bone, '["19_Right Eye Color2"]', text="")
@@ -324,9 +354,7 @@ class THERIG_PT_FaceEye(bpy.types.Panel):
             row.prop(bone, '["22_Left Eye Color2"]', text="")
 
 
-# ===== PUPIL =====
 class THERIG_PT_FacePupil(bpy.types.Panel):
-    """Pupil settings"""
     bl_label = "Pupil"
     bl_idname = "THERIG_PT_face_pupil"
     bl_space_type = 'VIEW_3D'
@@ -337,18 +365,16 @@ class THERIG_PT_FacePupil(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        return is_this_rig(context) and get_face_color_bone(context)
+        return is_this_rig(context) and get_face_color_bone(context) and is_face_enabled(context)
 
     def draw(self, context):
         layout = self.layout
         bone = get_face_color_bone(context)
         
-        # Headers
         row = layout.row()
         row.label(text="Right")
         row.label(text="Left")
         
-        # On/Off
         row = layout.row()
         if "24_Right Pupil" in bone:
             row.prop(bone, '["24_Right Pupil"]', text="On/Off")
@@ -358,14 +384,12 @@ class THERIG_PT_FacePupil(bpy.types.Panel):
         layout.separator()
         layout.label(text="Iris")
         
-        # Pupil Color1
         row = layout.row()
         if "25_Right Pupil Color1" in bone:
             row.prop(bone, '["25_Right Pupil Color1"]', text="")
         if "31_Left Pupil Color1" in bone:
             row.prop(bone, '["31_Left Pupil Color1"]', text="")
         
-        # Pupil Color2
         row = layout.row()
         if "26_Right Pupil Color2" in bone:
             row.prop(bone, '["26_Right Pupil Color2"]', text="")
@@ -375,14 +399,12 @@ class THERIG_PT_FacePupil(bpy.types.Panel):
         layout.separator()
         layout.label(text="Pupil")
         
-        # Pupil2 Color1
         row = layout.row()
         if "27_Right Pupil2 Color1" in bone:
             row.prop(bone, '["27_Right Pupil2 Color1"]', text="")
         if "33_Left Pupil2 Color1" in bone:
             row.prop(bone, '["33_Left Pupil2 Color1"]', text="")
         
-        # Pupil2 Color2
         row = layout.row()
         if "28_Right Pupil2 Color2" in bone:
             row.prop(bone, '["28_Right Pupil2 Color2"]', text="")
@@ -392,7 +414,6 @@ class THERIG_PT_FacePupil(bpy.types.Panel):
         layout.separator()
         layout.label(text="Spark")
         
-        # Spark Color
         row = layout.row()
         if "29_Right Spark Color" in bone:
             row.prop(bone, '["29_Right Spark Color"]', text="")
@@ -402,11 +423,9 @@ class THERIG_PT_FacePupil(bpy.types.Panel):
         layout.separator()
         layout.label(text="Glow")
         
-        # Pupil Glow On/Off
         if "43_Pupil Glow" in bone:
             layout.prop(bone, '["43_Pupil Glow"]', text="Pupil Glow")
         
-        # Glow Strength
         row = layout.row()
         if "44_Right Pupil Glow Strength" in bone:
             row.prop(bone, '["44_Right Pupil Glow Strength"]', text="Right")
@@ -414,9 +433,7 @@ class THERIG_PT_FacePupil(bpy.types.Panel):
             row.prop(bone, '["45_Left Pupil Glow Strength"]', text="Left")
 
 
-# ===== BROWS =====
 class THERIG_PT_FaceBrows(bpy.types.Panel):
-    """Eyebrow settings"""
     bl_label = "Brows"
     bl_idname = "THERIG_PT_face_brows"
     bl_space_type = 'VIEW_3D'
@@ -427,25 +444,22 @@ class THERIG_PT_FaceBrows(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        return is_this_rig(context) and get_face_color_bone(context)
+        return is_this_rig(context) and get_face_color_bone(context) and is_face_enabled(context)
 
     def draw(self, context):
         layout = self.layout
         bone = get_face_color_bone(context)
         
-        # Headers
         row = layout.row()
         row.label(text="Right")
         row.label(text="Left")
         
-        # On/Off
         row = layout.row()
         if "03_Right Eyebrow" in bone:
             row.prop(bone, '["03_Right Eyebrow"]', text="On/Off")
         if "06_Left Eyebrow" in bone:
             row.prop(bone, '["06_Left Eyebrow"]', text="On/Off")
         
-        # Colors - 04, 05 | 07, 08 on one row
         row = layout.row()
         if "04_Right Eyebrow Color1" in bone:
             row.prop(bone, '["04_Right Eyebrow Color1"]', text="")
@@ -458,9 +472,7 @@ class THERIG_PT_FaceBrows(bpy.types.Panel):
             row.prop(bone, '["08_Left Eyebrow Color2"]', text="")
 
 
-# ===== MOUTH =====
 class THERIG_PT_FaceMouth(bpy.types.Panel):
-    """Mouth settings"""
     bl_label = "Mouth"
     bl_idname = "THERIG_PT_face_mouth"
     bl_space_type = 'VIEW_3D'
@@ -471,19 +483,17 @@ class THERIG_PT_FaceMouth(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        return is_this_rig(context) and get_face_color_bone(context)
+        return is_this_rig(context) and get_face_color_bone(context) and is_face_enabled(context)
 
     def draw(self, context):
         layout = self.layout
         bone = get_face_color_bone(context)
         
-        # Mouth On/Off
         if "36_Mouth" in bone:
             layout.prop(bone, '["36_Mouth"]', text="Mouth")
         
         layout.separator()
         
-        # Teeth Colors
         layout.label(text="Teeth")
         row = layout.row()
         if "37_Teeth Color1" in bone:
@@ -493,7 +503,6 @@ class THERIG_PT_FaceMouth(bpy.types.Panel):
         
         layout.separator()
         
-        # Mouth & Tongue Colors
         if "40_Mouth Color" in bone:
             layout.prop(bone, '["40_Mouth Color"]', text="Mouth Color")
         if "39_Tongue Color" in bone:
@@ -501,14 +510,11 @@ class THERIG_PT_FaceMouth(bpy.types.Panel):
         
         layout.separator()
         
-        # Lips On/Off
         if "41_Lips" in bone:
             layout.prop(bone, '["41_Lips"]', text="Lips")
 
 
-# ===== SETTINGS =====
 class THERIG_PT_FaceSettings(bpy.types.Panel):
-    """Additional face settings"""
     bl_label = "Settings"
     bl_idname = "THERIG_PT_face_settings"
     bl_space_type = 'VIEW_3D'
@@ -519,7 +525,7 @@ class THERIG_PT_FaceSettings(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        return is_this_rig(context) and get_head_settings_bone(context)
+        return is_this_rig(context) and get_head_settings_bone(context) and is_face_enabled(context)
 
     def draw(self, context):
         layout = self.layout
@@ -541,7 +547,276 @@ class THERIG_PT_FaceSettings(bpy.types.Panel):
             col.prop(bone, '["Textured Pupils"]', text="Textured Pupils")
 
 
-# Classes to register
+class THERIG_PT_BodyPanel(bpy.types.Panel):
+    bl_label = "Body"
+    bl_idname = "THERIG_PT_body"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "TheRig"
+    bl_parent_id = "THERIG_PT_main"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        return is_this_rig(context) and get_body_settings_bone(context)
+
+    def draw(self, context):
+        layout = self.layout
+        bone = get_body_settings_bone(context)
+        
+        if "Breast" in bone:
+            layout.prop(bone, '["Breast"]', text="Breast")
+        if "Breast Size" in bone:
+            layout.prop(bone, '["Breast Size"]', text="Breast Size")
+        if "Hip" in bone:
+            layout.prop(bone, '["Hip"]', text="Hip")
+
+
+class THERIG_PT_ArmsPanel(bpy.types.Panel):
+    bl_label = "Arms"
+    bl_idname = "THERIG_PT_arms"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "TheRig"
+    bl_parent_id = "THERIG_PT_main"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        return is_this_rig(context) and (get_r_arm_settings_bone(context) or get_l_arm_settings_bone(context))
+
+    def draw(self, context):
+        layout = self.layout
+        r_bone = get_r_arm_settings_bone(context)
+        l_bone = get_l_arm_settings_bone(context)
+        
+        row = layout.row()
+        row.label(text="Right", icon='LOOP_FORWARDS')
+        row.label(text="Left", icon='LOOP_BACK')
+        
+        layout.separator()
+        
+        row = layout.row(align=True)
+        if r_bone and "FK/IK" in r_bone:
+            row.prop(r_bone, '["FK/IK"]', text="FK/IK")
+        if l_bone and "FK/IK" in l_bone:
+            row.prop(l_bone, '["FK/IK"]', text="FK/IK")
+        
+        row = layout.row(align=True)
+        if r_bone and "Fingers" in r_bone:
+            row.prop(r_bone, '["Fingers"]', text="Fingers")
+        if l_bone and "Fingers" in l_bone:
+            row.prop(l_bone, '["Fingers"]', text="Fingers")
+        
+        row = layout.row(align=True)
+        if r_bone and "Parent bone" in r_bone:
+            row.prop(r_bone, '["Parent bone"]', text="Parent")
+        if l_bone and "Parent bone" in l_bone:
+            row.prop(l_bone, '["Parent bone"]', text="Parent")
+        
+        row = layout.row(align=True)
+        if r_bone and "Tweak" in r_bone:
+            row.prop(r_bone, '["Tweak"]', text="Tweak")
+        if l_bone and "Tweak" in l_bone:
+            row.prop(l_bone, '["Tweak"]', text="Tweak")
+
+
+class THERIG_PT_LegsPanel(bpy.types.Panel):
+    bl_label = "Legs"
+    bl_idname = "THERIG_PT_legs"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "TheRig"
+    bl_parent_id = "THERIG_PT_main"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        return is_this_rig(context) and (get_r_leg_settings_bone(context) or get_l_leg_settings_bone(context))
+
+    def draw(self, context):
+        layout = self.layout
+        r_bone = get_r_leg_settings_bone(context)
+        l_bone = get_l_leg_settings_bone(context)
+        
+        row = layout.row()
+        row.label(text="Right", icon='LOOP_FORWARDS')
+        row.label(text="Left", icon='LOOP_BACK')
+        
+        layout.separator()
+        
+        row = layout.row(align=True)
+        if r_bone and "IK/FK" in r_bone:
+            row.prop(r_bone, '["IK/FK"]', text="IK/FK")
+        if l_bone and "IK/FK" in l_bone:
+            row.prop(l_bone, '["IK/FK"]', text="IK/FK")
+        
+        row = layout.row(align=True)
+        if r_bone and "Ankle Lock" in r_bone:
+            row.prop(r_bone, '["Ankle Lock"]', text="Ankle Lock")
+        if l_bone and "Ankle Lock" in l_bone:
+            row.prop(l_bone, '["Ankle Lock"]', text="Ankle Lock")
+        
+        row = layout.row(align=True)
+        if r_bone and "Tweak" in r_bone:
+            row.prop(r_bone, '["Tweak"]', text="Tweak")
+        if l_bone and "Tweak" in l_bone:
+            row.prop(l_bone, '["Tweak"]', text="Tweak")
+
+
+class THERIG_PT_TaperPanel(bpy.types.Panel):
+    bl_label = "Taper"
+    bl_idname = "THERIG_PT_taper"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "TheRig"
+    bl_parent_id = "THERIG_PT_settings"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        return is_this_rig(context) and get_taper_bone(context)
+
+    def draw(self, context):
+        layout = self.layout
+        bone = get_taper_bone(context)
+        
+        if not bone:
+            return
+        
+        layout.label(text="Body")
+        if " 1.Body Taper Top" in bone:
+            layout.prop(bone, '[" 1.Body Taper Top"]', text="Top")
+        if " 2.Body Taper Bottom" in bone:
+            layout.prop(bone, '[" 2.Body Taper Bottom"]', text="Bottom")
+        
+        layout.separator()
+        layout.label(text="Arms")
+        row = layout.row()
+        row.label(text="Right")
+        row.label(text="Left")
+        
+        row = layout.row()
+        if " 3.Right Arm Taper Top" in bone:
+            row.prop(bone, '[" 3.Right Arm Taper Top"]', text="Top")
+        if " 5.Left Arm Taper Top" in bone:
+            row.prop(bone, '[" 5.Left Arm Taper Top"]', text="Top")
+        
+        row = layout.row()
+        if " 4.Right Arm Taper Bottom" in bone:
+            row.prop(bone, '[" 4.Right Arm Taper Bottom"]', text="Bottom")
+        if " 6.Left Arm Taper Bottom" in bone:
+            row.prop(bone, '[" 6.Left Arm Taper Bottom"]', text="Bottom")
+        
+        layout.separator()
+        layout.label(text="Legs")
+        row = layout.row()
+        row.label(text="Right")
+        row.label(text="Left")
+        
+        row = layout.row()
+        if " 9.Right Leg Taper Up" in bone:
+            row.prop(bone, '[" 9.Right Leg Taper Up"]', text="Top")
+        if " 7.Left Leg Taper Top" in bone:
+            row.prop(bone, '[" 7.Left Leg Taper Top"]', text="Top")
+        
+        row = layout.row()
+        if "10.Right Leg Taper Bottom" in bone:
+            row.prop(bone, '["10.Right Leg Taper Bottom"]', text="Bottom")
+        if " 8.Left Leg Taper Bottom" in bone:
+            row.prop(bone, '[" 8.Left Leg Taper Bottom"]', text="Bottom")
+
+
+class THERIG_PT_ArmorPanel(bpy.types.Panel):
+    bl_label = "Armor"
+    bl_idname = "THERIG_PT_armor"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "TheRig"
+    bl_parent_id = "THERIG_PT_settings"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        return is_this_rig(context) and get_armor_bone(context)
+
+    def draw(self, context):
+        layout = self.layout
+        bone = get_armor_bone(context)
+        
+        if not bone:
+            return
+        
+        layout.label(text="Helmet")
+        row = layout.row()
+        if "01_Helmet" in bone:
+            row.prop(bone, '["01_Helmet"]', text="On/Off")
+        if "02_H_Type" in bone:
+            row.prop(bone, '["02_H_Type"]', text="Type")
+        if "03_H_Color" in bone:
+            layout.prop(bone, '["03_H_Color"]', text="Leather Color")
+        
+        layout.separator()
+        layout.label(text="ChestPlate")
+        row = layout.row()
+        if "04_ChestPlate" in bone:
+            row.prop(bone, '["04_ChestPlate"]', text="On/Off")
+        if "05_C_Type" in bone:
+            row.prop(bone, '["05_C_Type"]', text="Type")
+        if "06_C_Color" in bone:
+            layout.prop(bone, '["06_C_Color"]', text="Leather Color")
+        
+        layout.separator()
+        layout.label(text="Leggings")
+        row = layout.row()
+        if "07_Leggings" in bone:
+            row.prop(bone, '["07_Leggings"]', text="On/Off")
+        if "08_L_Type" in bone:
+            row.prop(bone, '["08_L_Type"]', text="Type")
+        if "09_L_Color" in bone:
+            layout.prop(bone, '["09_L_Color"]', text="Leather Color")
+        
+        layout.separator()
+        layout.label(text="Boots")
+        row = layout.row()
+        if "10_Boots" in bone:
+            row.prop(bone, '["10_Boots"]', text="On/Off")
+        if "11_B_Type" in bone:
+            row.prop(bone, '["11_B_Type"]', text="Type")
+        if "12_B_Color" in bone:
+            layout.prop(bone, '["12_B_Color"]', text="Leather Color")
+        
+        layout.separator()
+        if "13_Elytra/Cape" in bone:
+            layout.prop(bone, '["13_Elytra/Cape"]', text="Elytra/Cape")
+
+
+class THERIG_PT_SettingsPanel(bpy.types.Panel):
+    bl_label = "Settings"
+    bl_idname = "THERIG_PT_settings"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "TheRig"
+    bl_parent_id = "THERIG_PT_main"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        return is_this_rig(context)
+
+    def draw(self, context):
+        layout = self.layout
+        rig_bone = get_therig_bone(context)
+        
+        if rig_bone:
+            if "Arm Type" in rig_bone:
+                layout.prop(rig_bone, '["Arm Type"]', text="Arm Type")
+            if "Bevel" in rig_bone:
+                layout.prop(rig_bone, '["Bevel"]', text="Bevel")
+            if "Bevel Amount" in rig_bone:
+                layout.prop(rig_bone, '["Bevel Amount"]', text="Bevel Amount")
+
+
 classes = [
     THERIG_OT_DownloadSkin,
     THERIG_OT_ChangeSkin,
@@ -553,6 +828,12 @@ classes = [
     THERIG_PT_FaceBrows,
     THERIG_PT_FaceMouth,
     THERIG_PT_FaceSettings,
+    THERIG_PT_BodyPanel,
+    THERIG_PT_ArmsPanel,
+    THERIG_PT_LegsPanel,
+    THERIG_PT_SettingsPanel,
+    THERIG_PT_TaperPanel,
+    THERIG_PT_ArmorPanel,
 ]
 
 

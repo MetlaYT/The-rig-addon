@@ -1,5 +1,5 @@
 import bpy
-from . import operators, ui
+from . import operators, ui, updater
 
 bl_info = {
     "name": "The Rig addon",
@@ -13,11 +13,19 @@ bl_info = {
     "doc_url": "",
 }
 
+
 def register():
     operators.register()
     ui.register()
+    updater.register()
     print("THE RIG addon registered successfully!")
 
+
 def unregister():
+    updater.unregister()
     ui.unregister()
     operators.unregister()
+
+
+if __name__ == "__main__":
+    register()

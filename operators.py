@@ -210,7 +210,7 @@ class THRIG_OT_LoadCustomSkin(bpy.types.Operator, ImportHelper):
 def menu_func_armature(self, context):
     self.layout.separator()
     self.layout.operator(THRIG_OT_AppendMain.bl_idname, text="THE RIG", icon_value=get_icon('therigicon'))
-    self.layout.operator(THRIG_OT_AppendModify.bl_idname, text="TheRig(modify)", icon_value=get_icon('therigicon'))
+    self.layout.operator(THRIG_OT_AppendModify.bl_idname, text="TheRig(modify)", icon_value=get_icon('therigmodicon'))
     self.layout.operator(THPLUSH_OT_AppendPlush.bl_idname, text="THE PLUSH", icon_value=get_icon('theplushicon'))
     self.layout.operator(THSIMPLE_OT_AppendSimple.bl_idname, text="THE SIMPLE", icon_value=get_icon('thesimpleicon'))
     self.layout.operator(THBUFF_OT_AppendBuff.bl_idname, text="THE BUFF", icon_value=get_icon('thebufficon'))
@@ -220,7 +220,7 @@ def menu_func_armature(self, context):
 def menu_func_root(self, context):
     self.layout.separator()
     self.layout.operator(THRIG_OT_AppendMain.bl_idname, text="THE RIG", icon_value=get_icon('therigicon'))
-    self.layout.operator(THRIG_OT_AppendModify.bl_idname, text="TheRig(modify)", icon_value=get_icon('therigicon'))
+    self.layout.operator(THRIG_OT_AppendModify.bl_idname, text="TheRig(modify)", icon_value=get_icon('therigmodicon'))
     self.layout.operator(THPLUSH_OT_AppendPlush.bl_idname, text="THE PLUSH", icon_value=get_icon('theplushicon'))
     self.layout.operator(THSIMPLE_OT_AppendSimple.bl_idname, text="THE SIMPLE", icon_value=get_icon('thesimpleicon'))
     self.layout.operator(THBUFF_OT_AppendBuff.bl_idname, text="THE BUFF", icon_value=get_icon('thebufficon'))
@@ -283,6 +283,7 @@ def register():
     icons_dir = os.path.join(os.path.dirname(__file__), "assets", "icons")
     
     pcoll.load("therigicon", os.path.join(icons_dir, "therigicon.png"), 'IMAGE')
+    pcoll.load("therigmodicon", os.path.join(icons_dir, "therigmodicon.png"), 'IMAGE')
     pcoll.load("theplushicon", os.path.join(icons_dir, "theplushicon.png"), 'IMAGE')
     pcoll.load("thesimpleicon", os.path.join(icons_dir, "thesimpleicon.png"), 'IMAGE')
     pcoll.load("thebufficon", os.path.join(icons_dir, "TheBuff.png"), 'IMAGE')
