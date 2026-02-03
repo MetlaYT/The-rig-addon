@@ -22,8 +22,7 @@ class THESIMPLE_PT_MainPanel(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
-        rig = context.active_object
-        layout.label(text=f"Active: {rig.name}", icon='ARMATURE_DATA')
+        layout.label(text="Coming soon...", icon='INFO')
 
 
 classes = [

@@ -1,31 +1,61 @@
-# theplush_ui.py - UI panels for ThePlush
 import bpy
 import os
 import tempfile
 import urllib.request
 from bpy_extras.io_utils import ImportHelper
 
-# RigId for this file
 RIG_ID = "ThePlushA"
-SKIN_TEXTURE_NAME = "Skin_plush"  # Base name for plush skin texture
+SKIN_TEXTURE_NAME = "Skin_plush"
 
 
 def is_this_rig(context):
-    """Check if active object is the correct rig by RigId"""
     obj = context.active_object
     if obj and obj.type == 'ARMATURE':
         return obj.data.get("RigId") == RIG_ID
     return False
 
 
+def get_r_arm_settings_bone(context):
+    rig = context.active_object
+    if rig and rig.type == 'ARMATURE':
+        return rig.pose.bones.get("R_Arm_Settings")
+    return None
+
+
+def get_l_arm_settings_bone(context):
+    rig = context.active_object
+    if rig and rig.type == 'ARMATURE':
+        return rig.pose.bones.get("L_Arm_Settings")
+    return None
+
+
+def get_r_leg_settings_bone(context):
+    rig = context.active_object
+    if rig and rig.type == 'ARMATURE':
+        return rig.pose.bones.get("R_Leg_Settings")
+    return None
+
+
+def get_l_leg_settings_bone(context):
+    rig = context.active_object
+    if rig and rig.type == 'ARMATURE':
+        return rig.pose.bones.get("L_Leg_Settings")
+    return None
+
+
+def get_theplush_bone(context):
+    rig = context.active_object
+    if rig and rig.type == 'ARMATURE':
+        return rig.pose.bones.get("ThePlush")
+    return None
+
+
 def get_icon(icon_name):
-    """Get icon from preview collection"""
     from . import operators
     return operators.get_icon(icon_name)
 
 
 def find_skin_texture(rig):
-    """Find skin texture for this rig"""
     for child in rig.children:
         if child.type == 'MESH':
             for mat in child.data.materials:
@@ -38,7 +68,6 @@ def find_skin_texture(rig):
 
 
 def count_rigs_using_texture(texture):
-    """Count how many rigs use this texture"""
     count = 0
     for obj in bpy.data.objects:
         if obj.type == 'ARMATURE' and obj.data.get("RigId") == RIG_ID:
@@ -49,7 +78,6 @@ def count_rigs_using_texture(texture):
 
 
 def protect_texture_if_shared(rig, texture):
-    """Make a copy if texture is shared between multiple rigs"""
     if count_rigs_using_texture(texture) > 1:
         new_texture = texture.copy()
         new_texture.name = f"{SKIN_TEXTURE_NAME}_{rig.name}"
@@ -65,12 +93,6 @@ def protect_texture_if_shared(rig, texture):
 
 
 def convert_skin_64_to_56(source, target):
-    """Convert 64x64 Minecraft skin to 56x56 plush skin
-    
-    Based on converter.html logic:
-    - Top region (0,0 - 64x16) -> scaled to (0,0 - 56x14)
-    - Bottom region (0,16 - 64x48) -> scaled to (0,14 - 32x24)
-    """
     src_w, src_h = 64, 64
     tgt_w, tgt_h = target.size[0], target.size[1]
     
@@ -106,31 +128,25 @@ def convert_skin_64_to_56(source, target):
 
 
 def apply_skin_auto(rig, texture, source_image, report_func):
-    """Auto-detect skin format and apply (convert if needed)"""
     src_w, src_h = source_image.size[0], source_image.size[1]
     tgt_w, tgt_h = texture.size[0], texture.size[1]
     
-    # Same size - direct copy
     if src_w == tgt_w and src_h == tgt_h:
         texture.pixels[:] = source_image.pixels[:]
         texture.update()
         report_func({'INFO'}, f"Skin applied to {rig.name}!")
         return True
     
-    # 64x64 source - need to convert
     if src_w == 64 and src_h == 64:
         convert_skin_64_to_56(source_image, texture)
         report_func({'INFO'}, f"Skin converted and applied to {rig.name}!")
         return True
     
-    # Unknown format
     report_func({'ERROR'}, f"Unsupported skin size: {src_w}x{src_h}. Expected 64x64 or {tgt_w}x{tgt_h}")
     return False
 
 
-# ===== SKIN CHANGE OPERATOR =====
 class THEPLUSH_OT_ChangeSkin(bpy.types.Operator, ImportHelper):
-    """Change skin texture (auto-converts 64x64 to plush format)"""
     bl_idname = "theplush.change_skin"
     bl_label = "Change Skin"
     bl_options = {'REGISTER', 'UNDO'}
@@ -166,18 +182,12 @@ class THEPLUSH_OT_ChangeSkin(bpy.types.Operator, ImportHelper):
             return {'CANCELLED'}
 
 
-# ===== DOWNLOAD SKIN BY USERNAME =====
 class THEPLUSH_OT_DownloadSkin(bpy.types.Operator):
-    """Download skin by Minecraft username (auto-converts to plush format)"""
     bl_idname = "theplush.download_skin"
     bl_label = "Download Skin by Username"
     bl_options = {'REGISTER', 'UNDO'}
     
-    username: bpy.props.StringProperty(
-        name="Username",
-        description="Minecraft username",
-        default=""
-    )
+    username: bpy.props.StringProperty(name="Username", description="Minecraft username", default="")
     
     @classmethod
     def poll(cls, context):
@@ -229,7 +239,6 @@ class THEPLUSH_OT_DownloadSkin(bpy.types.Operator):
 
 
 class THEPLUSH_PT_MainPanel(bpy.types.Panel):
-    """Main panel for ThePlush"""
     bl_label = "ThePlush"
     bl_idname = "THEPLUSH_PT_main"
     bl_space_type = 'VIEW_3D'
@@ -243,7 +252,6 @@ class THEPLUSH_PT_MainPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         
-        # Info
         box = layout.box()
         icon_id = get_icon('theplushicon')
         if icon_id:
@@ -254,9 +262,7 @@ class THEPLUSH_PT_MainPanel(bpy.types.Panel):
         box.operator("wm.url_open", text="Portfolio", icon='URL').url = "https://theratmir.github.io/TheRatmir-Portfolio/"
 
 
-# ===== SKIN PANEL =====
 class THEPLUSH_PT_SkinPanel(bpy.types.Panel):
-    """Skin settings panel"""
     bl_label = "Skin"
     bl_idname = "THEPLUSH_PT_skin"
     bl_space_type = 'VIEW_3D'
@@ -282,11 +288,108 @@ class THEPLUSH_PT_SkinPanel(bpy.types.Panel):
             layout.label(text="No skin texture found", icon='ERROR')
 
 
+class THEPLUSH_PT_ArmsPanel(bpy.types.Panel):
+    bl_label = "Arms"
+    bl_idname = "THEPLUSH_PT_arms"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "ThePlush"
+    bl_parent_id = "THEPLUSH_PT_main"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        return is_this_rig(context) and (get_r_arm_settings_bone(context) or get_l_arm_settings_bone(context))
+
+    def draw(self, context):
+        layout = self.layout
+        r_bone = get_r_arm_settings_bone(context)
+        l_bone = get_l_arm_settings_bone(context)
+        
+        row = layout.row()
+        row.label(text="Right", icon='LOOP_FORWARDS')
+        row.label(text="Left", icon='LOOP_BACK')
+        
+        layout.separator()
+        
+        row = layout.row(align=True)
+        if r_bone and "FK/IK" in r_bone:
+            row.prop(r_bone, '["FK/IK"]', text="FK/IK")
+        if l_bone and "FK/IK" in l_bone:
+            row.prop(l_bone, '["FK/IK"]', text="FK/IK")
+
+
+class THEPLUSH_PT_LegsPanel(bpy.types.Panel):
+    bl_label = "Legs"
+    bl_idname = "THEPLUSH_PT_legs"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "ThePlush"
+    bl_parent_id = "THEPLUSH_PT_main"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        return is_this_rig(context) and (get_r_leg_settings_bone(context) or get_l_leg_settings_bone(context))
+
+    def draw(self, context):
+        layout = self.layout
+        r_bone = get_r_leg_settings_bone(context)
+        l_bone = get_l_leg_settings_bone(context)
+        
+        row = layout.row()
+        row.label(text="Right", icon='LOOP_FORWARDS')
+        row.label(text="Left", icon='LOOP_BACK')
+        
+        layout.separator()
+        
+        row = layout.row(align=True)
+        if r_bone and "IK/FK" in r_bone:
+            row.prop(r_bone, '["IK/FK"]', text="IK/FK")
+        if l_bone and "IK/FK" in l_bone:
+            row.prop(l_bone, '["IK/FK"]', text="IK/FK")
+        
+        row = layout.row(align=True)
+        if r_bone and "Ankle Lock" in r_bone:
+            row.prop(r_bone, '["Ankle Lock"]', text="Ankle Lock")
+        if l_bone and "Ankle Lock" in l_bone:
+            row.prop(l_bone, '["Ankle Lock"]', text="Ankle Lock")
+
+
+class THEPLUSH_PT_SettingsPanel(bpy.types.Panel):
+    bl_label = "Settings"
+    bl_idname = "THEPLUSH_PT_settings"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "ThePlush"
+    bl_parent_id = "THEPLUSH_PT_main"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        return is_this_rig(context)
+
+    def draw(self, context):
+        layout = self.layout
+        plush_bone = get_theplush_bone(context)
+        
+        if plush_bone:
+            if "Arm Type" in plush_bone:
+                layout.prop(plush_bone, '["Arm Type"]', text="Arm Type")
+            if "Bevel" in plush_bone:
+                layout.prop(plush_bone, '["Bevel"]', text="Bevel")
+            if "Bevel Amount" in plush_bone:
+                layout.prop(plush_bone, '["Bevel Amount"]', text="Bevel Amount")
+
+
 classes = [
     THEPLUSH_OT_ChangeSkin,
     THEPLUSH_OT_DownloadSkin,
     THEPLUSH_PT_MainPanel,
     THEPLUSH_PT_SkinPanel,
+    THEPLUSH_PT_ArmsPanel,
+    THEPLUSH_PT_LegsPanel,
+    THEPLUSH_PT_SettingsPanel,
 ]
 
 
