@@ -13,15 +13,15 @@ def is_this_rig(context):
     return False
 
 
-def get_face_color_bone(context):
+def get_face_settings_bone(context):
     rig = context.active_object
     if rig and rig.type == 'ARMATURE':
-        return rig.pose.bones.get("Face Color")
+        return rig.pose.bones.get("Face_Settings")
     return None
 
 
 def is_face_enabled(context):
-    bone = get_face_color_bone(context)
+    bone = get_face_settings_bone(context)
     if bone:
         face_off = bone.get("01_Face Off", 0)
         return face_off == 0 or face_off == False
@@ -304,11 +304,11 @@ class THERIG_PT_FacePanel(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        return is_this_rig(context) and get_face_color_bone(context)
+        return is_this_rig(context) and get_face_settings_bone(context)
 
     def draw(self, context):
         layout = self.layout
-        bone = get_face_color_bone(context)
+        bone = get_face_settings_bone(context)
         
         if bone and "01_Face Off" in bone:
             layout.prop(bone, '["01_Face Off"]', text="Face Off", toggle=True)
@@ -325,33 +325,33 @@ class THERIG_PT_FaceEye(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        return is_this_rig(context) and get_face_color_bone(context) and is_face_enabled(context)
+        return is_this_rig(context) and get_face_settings_bone(context) and is_face_enabled(context)
 
     def draw(self, context):
         layout = self.layout
-        bone = get_face_color_bone(context)
+        bone = get_face_settings_bone(context)
         
         row = layout.row()
         row.label(text="Right")
         row.label(text="Left")
         
         row = layout.row()
-        if "17_Right Eye" in bone:
-            row.prop(bone, '["17_Right Eye"]', text="On/Off")
-        if "20_Left Eye" in bone:
-            row.prop(bone, '["20_Left Eye"]', text="On/Off")
+        if "17.R_Eye- вкл выкл" in bone:
+            row.prop(bone, '["17.R_Eye- вкл выкл"]', text="On/Off")
+        if "20.L_Eye- вкл выкл" in bone:
+            row.prop(bone, '["20.L_Eye- вкл выкл"]', text="On/Off")
         
         row = layout.row()
-        if "18_Right Eye Color1" in bone:
-            row.prop(bone, '["18_Right Eye Color1"]', text="")
-        if "21_Left Eye Color1" in bone:
-            row.prop(bone, '["21_Left Eye Color1"]', text="")
+        if "18.R_Eye Top" in bone:
+            row.prop(bone, '["18.R_Eye Top"]', text="")
+        if "21.L_Eye Top" in bone:
+            row.prop(bone, '["21.L_Eye Top"]', text="")
         
         row = layout.row()
-        if "19_Right Eye Color2" in bone:
-            row.prop(bone, '["19_Right Eye Color2"]', text="")
-        if "22_Left Eye Color2" in bone:
-            row.prop(bone, '["22_Left Eye Color2"]', text="")
+        if "19.R_Eye Bot" in bone:
+            row.prop(bone, '["19.R_Eye Bot"]', text="")
+        if "22.L_Eye Bot" in bone:
+            row.prop(bone, '["22.L_Eye Bot"]', text="")
 
 
 class THERIG_PT_FacePupil(bpy.types.Panel):
@@ -365,72 +365,72 @@ class THERIG_PT_FacePupil(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        return is_this_rig(context) and get_face_color_bone(context) and is_face_enabled(context)
+        return is_this_rig(context) and get_face_settings_bone(context) and is_face_enabled(context)
 
     def draw(self, context):
         layout = self.layout
-        bone = get_face_color_bone(context)
+        bone = get_face_settings_bone(context)
         
         row = layout.row()
         row.label(text="Right")
         row.label(text="Left")
         
         row = layout.row()
-        if "24_Right Pupil" in bone:
-            row.prop(bone, '["24_Right Pupil"]', text="On/Off")
-        if "30_Left Pupil" in bone:
-            row.prop(bone, '["30_Left Pupil"]', text="On/Off")
+        if "24.R_Pupil- вкл выкл" in bone:
+            row.prop(bone, '["24.R_Pupil- вкл выкл"]', text="On/Off")
+        if "30.L_Pupil- вкл выкл" in bone:
+            row.prop(bone, '["30.L_Pupil- вкл выкл"]', text="On/Off")
         
         layout.separator()
         layout.label(text="Iris")
         
         row = layout.row()
-        if "25_Right Pupil Color1" in bone:
-            row.prop(bone, '["25_Right Pupil Color1"]', text="")
-        if "31_Left Pupil Color1" in bone:
-            row.prop(bone, '["31_Left Pupil Color1"]', text="")
+        if "25.R_Pupil Top" in bone:
+            row.prop(bone, '["25.R_Pupil Top"]', text="")
+        if "31.L_Pupil Top" in bone:
+            row.prop(bone, '["31.L_Pupil Top"]', text="")
         
         row = layout.row()
-        if "26_Right Pupil Color2" in bone:
-            row.prop(bone, '["26_Right Pupil Color2"]', text="")
-        if "32_Left Pupil Color2" in bone:
-            row.prop(bone, '["32_Left Pupil Color2"]', text="")
+        if "26.R_Pupil Bot" in bone:
+            row.prop(bone, '["26.R_Pupil Bot"]', text="")
+        if "32.L_Pupil Bot" in bone:
+            row.prop(bone, '["32.L_Pupil Bot"]', text="")
         
         layout.separator()
         layout.label(text="Pupil")
         
         row = layout.row()
-        if "27_Right Pupil2 Color1" in bone:
-            row.prop(bone, '["27_Right Pupil2 Color1"]', text="")
-        if "33_Left Pupil2 Color1" in bone:
-            row.prop(bone, '["33_Left Pupil2 Color1"]', text="")
+        if "27.R_Pupil2 Top" in bone:
+            row.prop(bone, '["27.R_Pupil2 Top"]', text="")
+        if "33.L_Pupil2 Top" in bone:
+            row.prop(bone, '["33.L_Pupil2 Top"]', text="")
         
         row = layout.row()
-        if "28_Right Pupil2 Color2" in bone:
-            row.prop(bone, '["28_Right Pupil2 Color2"]', text="")
-        if "34_Left Pupil2 Color2" in bone:
-            row.prop(bone, '["34_Left Pupil2 Color2"]', text="")
+        if "28.R_Pupil2 Bot" in bone:
+            row.prop(bone, '["28.R_Pupil2 Bot"]', text="")
+        if "34.L_Pupil2 Bot" in bone:
+            row.prop(bone, '["34.L_Pupil2 Bot"]', text="")
         
         layout.separator()
         layout.label(text="Spark")
         
         row = layout.row()
-        if "29_Right Spark Color" in bone:
-            row.prop(bone, '["29_Right Spark Color"]', text="")
-        if "35_Left Spark Color" in bone:
-            row.prop(bone, '["35_Left Spark Color"]', text="")
+        if "29.R_Sparkle" in bone:
+            row.prop(bone, '["29.R_Sparkle"]', text="")
+        if "35.L_Sparkle" in bone:
+            row.prop(bone, '["35.L_Sparkle"]', text="")
         
         layout.separator()
         layout.label(text="Glow")
         
-        if "43_Pupil Glow" in bone:
-            layout.prop(bone, '["43_Pupil Glow"]', text="Pupil Glow")
-        
         row = layout.row()
-        if "44_Right Pupil Glow Strength" in bone:
-            row.prop(bone, '["44_Right Pupil Glow Strength"]', text="Right")
-        if "45_Left Pupil Glow Strength" in bone:
-            row.prop(bone, '["45_Left Pupil Glow Strength"]', text="Left")
+        if "43.R_Pupil Glow - вкл выкл" in bone:
+            row.prop(bone, '["43.R_Pupil Glow - вкл выкл"]', text="Right")
+        if "44.L_Pupil Glow - вкл выкл" in bone:
+            row.prop(bone, '["44.L_Pupil Glow - вкл выкл"]', text="Left")
+        
+        if "45.Pupils Glow Strength" in bone:
+            layout.prop(bone, '["45.Pupils Glow Strength"]', text="Strength")
 
 
 class THERIG_PT_FaceBrows(bpy.types.Panel):
@@ -444,32 +444,33 @@ class THERIG_PT_FaceBrows(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        return is_this_rig(context) and get_face_color_bone(context) and is_face_enabled(context)
+        return is_this_rig(context) and get_face_settings_bone(context) and is_face_enabled(context)
 
     def draw(self, context):
         layout = self.layout
-        bone = get_face_color_bone(context)
+        bone = get_face_settings_bone(context)
         
         row = layout.row()
         row.label(text="Right")
         row.label(text="Left")
         
         row = layout.row()
-        if "03_Right Eyebrow" in bone:
-            row.prop(bone, '["03_Right Eyebrow"]', text="On/Off")
-        if "06_Left Eyebrow" in bone:
-            row.prop(bone, '["06_Left Eyebrow"]', text="On/Off")
+        if "03.R_Eyebrow - вкл выкл" in bone:
+            row.prop(bone, '["03.R_Eyebrow - вкл выкл"]', text="On/Off")
+        if "06.L_EyeBrows- вкл выкл" in bone:
+            row.prop(bone, '["06.L_EyeBrows- вкл выкл"]', text="On/Off")
         
         row = layout.row()
-        if "04_Right Eyebrow Color1" in bone:
-            row.prop(bone, '["04_Right Eyebrow Color1"]', text="")
-        if "05_Right Eyebrow Color2" in bone:
-            row.prop(bone, '["05_Right Eyebrow Color2"]', text="")
-        row.separator()
-        if "07_Left Eyebrow Color1" in bone:
-            row.prop(bone, '["07_Left Eyebrow Color1"]', text="")
-        if "08_Left Eyebrow Color2" in bone:
-            row.prop(bone, '["08_Left Eyebrow Color2"]', text="")
+        if "04.R_Eyebrow1" in bone:
+            row.prop(bone, '["04.R_Eyebrow1"]', text="")
+        if "07.L_Eyebrow1" in bone:
+            row.prop(bone, '["07.L_Eyebrow1"]', text="")
+        
+        row = layout.row()
+        if "05.R_Eyebrow2" in bone:
+            row.prop(bone, '["05.R_Eyebrow2"]', text="")
+        if "08.L_Eyebrow2" in bone:
+            row.prop(bone, '["08.L_Eyebrow2"]', text="")
 
 
 class THERIG_PT_FaceEyelashes(bpy.types.Panel):
@@ -483,37 +484,38 @@ class THERIG_PT_FaceEyelashes(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        if not is_this_rig(context) or not get_face_color_bone(context) or not is_face_enabled(context):
+        if not is_this_rig(context) or not get_face_settings_bone(context) or not is_face_enabled(context):
             return False
-        head_bone = get_head_settings_bone(context)
-        if head_bone and "Eyelashes" in head_bone:
-            return head_bone["Eyelashes"] == 1
+        bone = get_face_settings_bone(context)
+        if bone and "10.R_Eyelash - вкл выкл" in bone:
+            return bone["10.R_Eyelash - вкл выкл"] == 1 or bone["10.R_Eyelash - вкл выкл"] == True
         return False
 
     def draw(self, context):
         layout = self.layout
-        bone = get_face_color_bone(context)
+        bone = get_face_settings_bone(context)
         
         row = layout.row()
         row.label(text="Right")
         row.label(text="Left")
         
         row = layout.row()
-        if "10_Right Eyelash" in bone:
-            row.prop(bone, '["10_Right Eyelash"]', text="On/Off")
-        if "13_Left Eyelash" in bone:
-            row.prop(bone, '["13_Left Eyelash"]', text="On/Off")
+        if "10.R_Eyelash - вкл выкл" in bone:
+            row.prop(bone, '["10.R_Eyelash - вкл выкл"]', text="On/Off")
+        if "13.L_Eyelash - вкл выкл" in bone:
+            row.prop(bone, '["13.L_Eyelash - вкл выкл"]', text="On/Off")
         
         row = layout.row()
-        if "12_Right Eyelash Color1" in bone:
-            row.prop(bone, '["12_Right Eyelash Color1"]', text="")
-        if "11_Right Eyelash Color2" in bone:
-            row.prop(bone, '["11_Right Eyelash Color2"]', text="")
-        row.separator()
-        if "14_Left Eyelash Color1" in bone:
-            row.prop(bone, '["14_Left Eyelash Color1"]', text="")
-        if "15_Left Eyelash Color2" in bone:
-            row.prop(bone, '["15_Left Eyelash Color2"]', text="")
+        if "11.R_Eyelash1" in bone:
+            row.prop(bone, '["11.R_Eyelash1"]', text="")
+        if "14.L_Eyelash1" in bone:
+            row.prop(bone, '["14.L_Eyelash1"]', text="")
+        
+        row = layout.row()
+        if "12.R_Eyelash2" in bone:
+            row.prop(bone, '["12.R_Eyelash2"]', text="")
+        if "15.L_Eyelash2" in bone:
+            row.prop(bone, '["15.L_Eyelash2"]', text="")
 
 
 class THERIG_PT_FaceMouth(bpy.types.Panel):
@@ -527,37 +529,39 @@ class THERIG_PT_FaceMouth(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        return is_this_rig(context) and get_face_color_bone(context) and is_face_enabled(context)
+        return is_this_rig(context) and get_face_settings_bone(context) and is_face_enabled(context)
 
     def draw(self, context):
         layout = self.layout
-        bone = get_face_color_bone(context)
+        bone = get_face_settings_bone(context)
         
-        if "36_Mouth" in bone:
-            layout.prop(bone, '["36_Mouth"]', text="Mouth")
-        
-        layout.separator()
-        
-        layout.label(text="Teeth")
         row = layout.row()
-        if "37_Teeth Color1" in bone:
-            row.prop(bone, '["37_Teeth Color1"]', text="")
-        if "38_Teeth Color2" in bone:
-            row.prop(bone, '["38_Teeth Color2"]', text="")
+        if "36.Mouth - вкл выкл" in bone:
+            row.prop(bone, '["36.Mouth - вкл выкл"]', text="Mouth")
+        
+        layout.separator()
+        layout.label(text="Teeth")
+        
+        row = layout.row()
+        if "38.Teeth Top" in bone:
+            row.prop(bone, '["38.Teeth Top"]', text="")
+        if "39.Teeth Bot" in bone:
+            row.prop(bone, '["39.Teeth Bot"]', text="")
         
         layout.separator()
         
-        if "40_Mouth Color" in bone:
-            layout.prop(bone, '["40_Mouth Color"]', text="Mouth Color")
-        if "39_Tongue Color" in bone:
-            layout.prop(bone, '["39_Tongue Color"]', text="Tongue Color")
+        if "37.Mouth Color" in bone:
+            layout.prop(bone, '["37.Mouth Color"]', text="Mouth Color")
+        if "40.Tongue" in bone:
+            layout.prop(bone, '["40.Tongue"]', text="Tongue Color")
         
         layout.separator()
         
-        if "41_Lips" in bone:
-            layout.prop(bone, '["41_Lips"]', text="Lips")
-        if "42_Lips Color" in bone:
-            layout.prop(bone, '["42_Lips Color"]', text="Lips Color")
+        row = layout.row()
+        if "41.Lips - вкл выкл" in bone:
+            row.prop(bone, '["41.Lips - вкл выкл"]', text="On/Off")
+        if "42.Lips Color" in bone:
+            row.prop(bone, '["42.Lips Color"]', text="Color")
 
 
 class THERIG_PT_FaceSettings(bpy.types.Panel):
