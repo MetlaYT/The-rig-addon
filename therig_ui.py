@@ -1,4 +1,4 @@
-import bpy
+﻿import bpy
 import os
 from bpy_extras.io_utils import ImportHelper
 
@@ -23,7 +23,7 @@ def get_face_settings_bone(context):
 def is_face_enabled(context):
     bone = get_face_settings_bone(context)
     if bone:
-        face_off = bone.get("01_Face Off", 0)
+        face_off = bone.get("01.Face Off", 0)
         return face_off == 0 or face_off == False
     return True
 
@@ -310,8 +310,8 @@ class THERIG_PT_FacePanel(bpy.types.Panel):
         layout = self.layout
         bone = get_face_settings_bone(context)
         
-        if bone and "01_Face Off" in bone:
-            layout.prop(bone, '["01_Face Off"]', text="Face Off", toggle=True)
+        if bone and "01.Face Off" in bone:
+            layout.prop(bone, '["01.Face Off"]', text="Face Off", toggle=True)
 
 
 class THERIG_PT_FaceEye(bpy.types.Panel):
@@ -336,10 +336,10 @@ class THERIG_PT_FaceEye(bpy.types.Panel):
         row.label(text="Left")
         
         row = layout.row()
-        if "17.R_Eye- вкл выкл" in bone:
-            row.prop(bone, '["17.R_Eye- вкл выкл"]', text="On/Off")
-        if "20.L_Eye- вкл выкл" in bone:
-            row.prop(bone, '["20.L_Eye- вкл выкл"]', text="On/Off")
+        if "17.R_Eye" in bone:
+            row.prop(bone, '["17.R_Eye"]', text="On/Off")
+        if "20.L_Eye" in bone:
+            row.prop(bone, '["20.L_Eye"]', text="On/Off")
         
         row = layout.row()
         if "18.R_Eye Top" in bone:
@@ -376,10 +376,10 @@ class THERIG_PT_FacePupil(bpy.types.Panel):
         row.label(text="Left")
         
         row = layout.row()
-        if "24.R_Pupil- вкл выкл" in bone:
-            row.prop(bone, '["24.R_Pupil- вкл выкл"]', text="On/Off")
-        if "30.L_Pupil- вкл выкл" in bone:
-            row.prop(bone, '["30.L_Pupil- вкл выкл"]', text="On/Off")
+        if "24.R_Pupil" in bone:
+            row.prop(bone, '["24.R_Pupil"]', text="On/Off")
+        if "30.L_Pupil" in bone:
+            row.prop(bone, '["30.L_Pupil"]', text="On/Off")
         
         layout.separator()
         layout.label(text="Iris")
@@ -424,10 +424,10 @@ class THERIG_PT_FacePupil(bpy.types.Panel):
         layout.label(text="Glow")
         
         row = layout.row()
-        if "43.R_Pupil Glow - вкл выкл" in bone:
-            row.prop(bone, '["43.R_Pupil Glow - вкл выкл"]', text="Right")
-        if "44.L_Pupil Glow - вкл выкл" in bone:
-            row.prop(bone, '["44.L_Pupil Glow - вкл выкл"]', text="Left")
+        if "43.R_Pupil Glow" in bone:
+            row.prop(bone, '["43.R_Pupil Glow"]', text="Right")
+        if "44.L_Pupil Glow" in bone:
+            row.prop(bone, '["44.L_Pupil Glow"]', text="Left")
         
         if "45.Pupils Glow Strength" in bone:
             layout.prop(bone, '["45.Pupils Glow Strength"]', text="Strength")
@@ -455,10 +455,10 @@ class THERIG_PT_FaceBrows(bpy.types.Panel):
         row.label(text="Left")
         
         row = layout.row()
-        if "03.R_Eyebrow - вкл выкл" in bone:
-            row.prop(bone, '["03.R_Eyebrow - вкл выкл"]', text="On/Off")
-        if "06.L_EyeBrows- вкл выкл" in bone:
-            row.prop(bone, '["06.L_EyeBrows- вкл выкл"]', text="On/Off")
+        if "03.R_Eyebrow" in bone:
+            row.prop(bone, '["03.R_Eyebrow"]', text="On/Off")
+        if "06.L_EyeBrows" in bone:
+            row.prop(bone, '["06.L_EyeBrows"]', text="On/Off")
         
         row = layout.row()
         if "04.R_Eyebrow1" in bone:
@@ -487,8 +487,8 @@ class THERIG_PT_FaceEyelashes(bpy.types.Panel):
         if not is_this_rig(context) or not get_face_settings_bone(context) or not is_face_enabled(context):
             return False
         bone = get_face_settings_bone(context)
-        if bone and "10.R_Eyelash - вкл выкл" in bone:
-            return bone["10.R_Eyelash - вкл выкл"] == 1 or bone["10.R_Eyelash - вкл выкл"] == True
+        if bone and "10.R_Eyelash" in bone:
+            return bone["10.R_Eyelash"] == 1 or bone["10.R_Eyelash"] == True
         return False
 
     def draw(self, context):
@@ -500,10 +500,10 @@ class THERIG_PT_FaceEyelashes(bpy.types.Panel):
         row.label(text="Left")
         
         row = layout.row()
-        if "10.R_Eyelash - вкл выкл" in bone:
-            row.prop(bone, '["10.R_Eyelash - вкл выкл"]', text="On/Off")
-        if "13.L_Eyelash - вкл выкл" in bone:
-            row.prop(bone, '["13.L_Eyelash - вкл выкл"]', text="On/Off")
+        if "10.R_Eyelash" in bone:
+            row.prop(bone, '["10.R_Eyelash"]', text="On/Off")
+        if "13.L_Eyelash" in bone:
+            row.prop(bone, '["13.L_Eyelash"]', text="On/Off")
         
         row = layout.row()
         if "11.R_Eyelash1" in bone:
@@ -536,8 +536,8 @@ class THERIG_PT_FaceMouth(bpy.types.Panel):
         bone = get_face_settings_bone(context)
         
         row = layout.row()
-        if "36.Mouth - вкл выкл" in bone:
-            row.prop(bone, '["36.Mouth - вкл выкл"]', text="Mouth")
+        if "36.Mouth" in bone:
+            row.prop(bone, '["36.Mouth"]', text="Mouth")
         
         layout.separator()
         layout.label(text="Teeth")
@@ -558,8 +558,8 @@ class THERIG_PT_FaceMouth(bpy.types.Panel):
         layout.separator()
         
         row = layout.row()
-        if "41.Lips - вкл выкл" in bone:
-            row.prop(bone, '["41.Lips - вкл выкл"]', text="On/Off")
+        if "41.Lips" in bone:
+            row.prop(bone, '["41.Lips"]', text="On/Off")
         if "42.Lips Color" in bone:
             row.prop(bone, '["42.Lips Color"]', text="Color")
 
@@ -589,12 +589,18 @@ class THERIG_PT_FaceSettings(bpy.types.Panel):
         
         if "1px eyes" in bone:
             col.prop(bone, '["1px eyes"]', text="1px Eyes")
+        if "2px Pupils" in bone:
+            col.prop(bone, '["2px Pupils"]', text="2px Pupils")
+        if "Simple Pupils" in bone:
+            col.prop(bone, '["Simple Pupils"]', text="Simple Pupils")
         if "Double Eyes" in bone:
             col.prop(bone, '["Double Eyes"]', text="Double Eyes")
         if "Eyelashes" in bone:
             col.prop(bone, '["Eyelashes"]', text="Eyelashes")
         if "Textured Pupils" in bone:
             col.prop(bone, '["Textured Pupils"]', text="Textured Pupils")
+        if "Cartoon Face" in bone:
+            col.prop(bone, '["Cartoon Face"]', text="Cartoon Face")
 
 
 class THERIG_PT_BodyPanel(bpy.types.Panel):
@@ -618,8 +624,8 @@ class THERIG_PT_BodyPanel(bpy.types.Panel):
             layout.prop(bone, '["Breast"]', text="Breast")
         if "Breast Size" in bone:
             layout.prop(bone, '["Breast Size"]', text="Breast Size")
-        if "Hip" in bone:
-            layout.prop(bone, '["Hip"]', text="Hip")
+        if "Hips" in bone:
+            layout.prop(bone, '["Hips"]', text="Hips")
 
 
 class THERIG_PT_ArmsPanel(bpy.types.Panel):

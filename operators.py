@@ -302,12 +302,10 @@ def register():
     bpy.utils.register_class(THRIG_OT_ShowFace)
     bpy.utils.register_class(THRIG_OT_HideFace)
 
-    bpy.types.VIEW3D_MT_armature_add.append(menu_func_armature)
     bpy.types.VIEW3D_MT_add.append(menu_func_root)
 
 
 def unregister():
-    bpy.types.VIEW3D_MT_armature_add.remove(menu_func_armature)
     bpy.types.VIEW3D_MT_add.remove(menu_func_root)
     
     bpy.utils.unregister_class(THRIG_OT_HideFace)

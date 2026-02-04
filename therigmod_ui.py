@@ -23,7 +23,7 @@ def get_face_settings_bone(context):
 def is_face_enabled(context):
     bone = get_face_settings_bone(context)
     if bone:
-        face_off = bone.get("01_Face Off", 0)
+        face_off = bone.get("01.Face Off", 0)
         return face_off == 0 or face_off == False
     return True
 
@@ -87,7 +87,7 @@ def get_taper_bone(context):
 def get_THERIGMOD_bone(context):
     rig = context.active_object
     if rig and rig.type == 'ARMATURE':
-        return rig.pose.bones.get("TheRigMod")
+        return rig.pose.bones.get("TheRig")
     return None
 
 
@@ -318,10 +318,8 @@ class THERIGMOD_PT_FacePanel(bpy.types.Panel):
         layout = self.layout
         bone = get_face_settings_bone(context)
         
-        if bone and "01_Face Off" in bone:
-            layout.prop(bone, '["01_Face Off"]', text="Face Off", toggle=True)
-        if bone and "46.Tears" in bone:
-            layout.prop(bone, '["46.Tears"]', text="Tears")
+        if bone and "01.Face Off" in bone:
+            layout.prop(bone, '["01.Face Off"]', text="Face Off", toggle=True)
 
 
 class THERIGMOD_PT_FaceEye(bpy.types.Panel):
@@ -346,10 +344,10 @@ class THERIGMOD_PT_FaceEye(bpy.types.Panel):
         row.label(text="Left")
         
         row = layout.row()
-        if "17.R_Eye- ��� ����" in bone:
-            row.prop(bone, '["17.R_Eye- ��� ����"]', text="On/Off")
-        if "20.L_Eye- ��� ����" in bone:
-            row.prop(bone, '["20.L_Eye- ��� ����"]', text="On/Off")
+        if "17.R_Eye" in bone:
+            row.prop(bone, '["17.R_Eye"]', text="On/Off")
+        if "20.L_Eye" in bone:
+            row.prop(bone, '["20.L_Eye"]', text="On/Off")
         
         row = layout.row()
         if "18.R_Eye Top" in bone:
@@ -386,10 +384,10 @@ class THERIGMOD_PT_FacePupil(bpy.types.Panel):
         row.label(text="Left")
         
         row = layout.row()
-        if "24.R_Pupil- ��� ����" in bone:
-            row.prop(bone, '["24.R_Pupil- ��� ����"]', text="On/Off")
-        if "30.L_Pupil- ��� ����" in bone:
-            row.prop(bone, '["30.L_Pupil- ��� ����"]', text="On/Off")
+        if "24.R_Pupil" in bone:
+            row.prop(bone, '["24.R_Pupil"]', text="On/Off")
+        if "30.L_Pupil" in bone:
+            row.prop(bone, '["30.L_Pupil"]', text="On/Off")
         
         layout.separator()
         layout.label(text="Iris")
@@ -434,10 +432,10 @@ class THERIGMOD_PT_FacePupil(bpy.types.Panel):
         layout.label(text="Glow")
         
         row = layout.row()
-        if "43.R_Pupil Glow - вкл выкл" in bone:
-            row.prop(bone, '["43.R_Pupil Glow - вкл выкл"]', text="Right")
-        if "44.L_Pupil Glow - вкл выкл" in bone:
-            row.prop(bone, '["44.L_Pupil Glow - вкл выкл"]', text="Left")
+        if "43.R_Pupil Glow" in bone:
+            row.prop(bone, '["43.R_Pupil Glow"]', text="Right")
+        if "44.L_Pupil Glow" in bone:
+            row.prop(bone, '["44.L_Pupil Glow"]', text="Left")
         
         if "45.Pupils Glow Strength" in bone:
             layout.prop(bone, '["45.Pupils Glow Strength"]', text="Strength")
@@ -465,19 +463,20 @@ class THERIGMOD_PT_FaceBrows(bpy.types.Panel):
         row.label(text="Left")
         
         row = layout.row()
-        if "03.R_Eyebrow - ��� ����" in bone:
-            row.prop(bone, '["03.R_Eyebrow - ��� ����"]', text="On/Off")
-        if "06.L_EyeBrows- ��� ����" in bone:
-            row.prop(bone, '["06.L_EyeBrows- ��� ����"]', text="On/Off")
+        if "03.R_Eyebrow" in bone:
+            row.prop(bone, '["03.R_Eyebrow"]', text="On/Off")
+        if "06.L_EyeBrows" in bone:
+            row.prop(bone, '["06.L_EyeBrows"]', text="On/Off")
         
         row = layout.row()
         if "04.R_Eyebrow1" in bone:
             row.prop(bone, '["04.R_Eyebrow1"]', text="")
-        if "05.R_Eyebrow2" in bone:
-            row.prop(bone, '["05.R_Eyebrow2"]', text="")
-        row.separator()
         if "07.L_Eyebrow1" in bone:
             row.prop(bone, '["07.L_Eyebrow1"]', text="")
+        
+        row = layout.row()
+        if "05.R_Eyebrow2" in bone:
+            row.prop(bone, '["05.R_Eyebrow2"]', text="")
         if "08.L_Eyebrow2" in bone:
             row.prop(bone, '["08.L_Eyebrow2"]', text="")
 
@@ -496,8 +495,8 @@ class THERIGMOD_PT_FaceEyelashes(bpy.types.Panel):
         if not is_this_rig(context) or not get_face_settings_bone(context) or not is_face_enabled(context):
             return False
         bone = get_face_settings_bone(context)
-        if bone and "10.R_Eyelash - вкл выкл" in bone:
-            return bone["10.R_Eyelash - вкл выкл"] == 1 or bone["10.R_Eyelash - вкл выкл"] == True
+        if bone and "10.R_Eyelash" in bone:
+            return bone["10.R_Eyelash"] == 1 or bone["10.R_Eyelash"] == True
         return False
 
     def draw(self, context):
@@ -509,10 +508,10 @@ class THERIGMOD_PT_FaceEyelashes(bpy.types.Panel):
         row.label(text="Left")
         
         row = layout.row()
-        if "10.R_Eyelash - вкл выкл" in bone:
-            row.prop(bone, '["10.R_Eyelash - вкл выкл"]', text="On/Off")
-        if "13.L_Eyelash - вкл выкл" in bone:
-            row.prop(bone, '["13.L_Eyelash - вкл выкл"]', text="On/Off")
+        if "10.R_Eyelash" in bone:
+            row.prop(bone, '["10.R_Eyelash"]', text="On/Off")
+        if "13.L_Eyelash" in bone:
+            row.prop(bone, '["13.L_Eyelash"]', text="On/Off")
         
         row = layout.row()
         if "11.R_Eyelash1" in bone:
@@ -544,12 +543,13 @@ class THERIGMOD_PT_FaceMouth(bpy.types.Panel):
         layout = self.layout
         bone = get_face_settings_bone(context)
         
-        if "36.Mouth - ��� ����" in bone:
-            layout.prop(bone, '["36.Mouth - ��� ����"]', text="Mouth")
+        row = layout.row()
+        if "36.Mouth" in bone:
+            row.prop(bone, '["36.Mouth"]', text="Mouth")
         
         layout.separator()
-        
         layout.label(text="Teeth")
+        
         row = layout.row()
         if "38.Teeth Top" in bone:
             row.prop(bone, '["38.Teeth Top"]', text="")
@@ -565,8 +565,11 @@ class THERIGMOD_PT_FaceMouth(bpy.types.Panel):
         
         layout.separator()
         
-        if "41.Lips - ��� ����" in bone:
-            layout.prop(bone, '["41.Lips - ��� ����"]', text="Lips")
+        row = layout.row()
+        if "41.Lips" in bone:
+            row.prop(bone, '["41.Lips"]', text="On/Off")
+        if "42.Lips Color" in bone:
+            row.prop(bone, '["42.Lips Color"]', text="Color")
 
 
 class THERIGMOD_PT_FaceSettings(bpy.types.Panel):
@@ -594,12 +597,18 @@ class THERIGMOD_PT_FaceSettings(bpy.types.Panel):
         
         if "1px eyes" in bone:
             col.prop(bone, '["1px eyes"]', text="1px Eyes")
+        if "2px Pupils" in bone:
+            col.prop(bone, '["2px Pupils"]', text="2px Pupils")
+        if "Simple Pupils" in bone:
+            col.prop(bone, '["Simple Pupils"]', text="Simple Pupils")
         if "Double Eyes" in bone:
             col.prop(bone, '["Double Eyes"]', text="Double Eyes")
         if "Eyelashes" in bone:
             col.prop(bone, '["Eyelashes"]', text="Eyelashes")
         if "Textured Pupils" in bone:
             col.prop(bone, '["Textured Pupils"]', text="Textured Pupils")
+        if "Cartoon Face" in bone:
+            col.prop(bone, '["Cartoon Face"]', text="Cartoon Face")
 
 
 class THERIGMOD_PT_BodyPanel(bpy.types.Panel):
@@ -623,8 +632,8 @@ class THERIGMOD_PT_BodyPanel(bpy.types.Panel):
             layout.prop(bone, '["Breast"]', text="Breast")
         if "Breast Size" in bone:
             layout.prop(bone, '["Breast Size"]', text="Breast Size")
-        if "Hip" in bone:
-            layout.prop(bone, '["Hip"]', text="Hip")
+        if "Hips" in bone:
+            layout.prop(bone, '["Hips"]', text="Hips")
 
 
 class THERIGMOD_PT_ArmsPanel(bpy.types.Panel):
@@ -874,88 +883,16 @@ class THERIGMOD_PT_SettingsPanel(bpy.types.Panel):
         if rig_bone:
             if "Arm Type" in rig_bone:
                 layout.prop(rig_bone, '["Arm Type"]', text="Arm Type")
+            if "Auto Extrude" in rig_bone:
+                layout.prop(rig_bone, '["Auto Extrude"]', text="Auto Extrude")
             if "Bevel" in rig_bone:
                 layout.prop(rig_bone, '["Bevel"]', text="Bevel")
             if "Bevel Amount" in rig_bone:
                 layout.prop(rig_bone, '["Bevel Amount"]', text="Bevel Amount")
-
-
-class THERIGMOD_PT_ExtrudePanel(bpy.types.Panel):
-    bl_label = "Extrude"
-    bl_idname = "THERIGMOD_PT_extrude"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
-    bl_category = "TheRigMod"
-    bl_parent_id = "THERIGMOD_PT_settings"
-    bl_options = {'DEFAULT_CLOSED'}
-
-    @classmethod
-    def poll(cls, context):
-        return is_this_rig(context)
-
-    def draw(self, context):
-        layout = self.layout
-        head_bone = get_head_settings_bone(context)
-        body_bone = get_body_settings_bone(context)
-        r_arm_bone = get_r_arm_settings_bone(context)
-        l_arm_bone = get_l_arm_settings_bone(context)
-        r_leg_bone = get_r_leg_settings_bone(context)
-        l_leg_bone = get_l_leg_settings_bone(context)
-        
-        # Head
-        layout.label(text="Head")
-        if head_bone:
-            if "1_Auto Extrude" in head_bone:
-                layout.prop(head_bone, '["1_Auto Extrude"]', text="Auto Extrude")
-            if "2_Extrude Value" in head_bone:
-                layout.prop(head_bone, '["2_Extrude Value"]', text="Extrude Value")
-        
-        # Body
-        layout.separator()
-        layout.label(text="Body")
-        if body_bone:
-            if "Auto Extrude" in body_bone:
-                layout.prop(body_bone, '["Auto Extrude"]', text="Auto Extrude")
-            if "Extrude Value" in body_bone:
-                layout.prop(body_bone, '["Extrude Value"]', text="Extrude Value")
-        
-        # Arms
-        layout.separator()
-        layout.label(text="Arms")
-        row = layout.row()
-        row.label(text="Right")
-        row.label(text="Left")
-        
-        row = layout.row()
-        if r_arm_bone and "Auto Extrude" in r_arm_bone:
-            row.prop(r_arm_bone, '["Auto Extrude"]', text="Auto")
-        if l_arm_bone and "Auto Extrude" in l_arm_bone:
-            row.prop(l_arm_bone, '["Auto Extrude"]', text="Auto")
-        
-        row = layout.row()
-        if r_arm_bone and "Extrude Value" in r_arm_bone:
-            row.prop(r_arm_bone, '["Extrude Value"]', text="Value")
-        if l_arm_bone and "Extrude Value" in l_arm_bone:
-            row.prop(l_arm_bone, '["Extrude Value"]', text="Value")
-        
-        # Legs
-        layout.separator()
-        layout.label(text="Legs")
-        row = layout.row()
-        row.label(text="Right")
-        row.label(text="Left")
-        
-        row = layout.row()
-        if r_leg_bone and "Auto Extrude" in r_leg_bone:
-            row.prop(r_leg_bone, '["Auto Extrude"]', text="Auto")
-        if l_leg_bone and "Auto Extrude" in l_leg_bone:
-            row.prop(l_leg_bone, '["Auto Extrude"]', text="Auto")
-        
-        row = layout.row()
-        if r_leg_bone and "Extrude Value" in r_leg_bone:
-            row.prop(r_leg_bone, '["Extrude Value"]', text="Value")
-        if l_leg_bone and "Extrude Value" in l_leg_bone:
-            row.prop(l_leg_bone, '["Extrude Value"]', text="Value")
+            if "Extrude Amount" in rig_bone:
+                layout.prop(rig_bone, '["Extrude Amount"]', text="Extrude Amount")
+            if "Outline Amount" in rig_bone:
+                layout.prop(rig_bone, '["Outline Amount"]', text="Outline Amount")
 
 
 classes = [
@@ -967,6 +904,7 @@ classes = [
     THERIGMOD_PT_FaceEye,
     THERIGMOD_PT_FacePupil,
     THERIGMOD_PT_FaceBrows,
+    THERIGMOD_PT_FaceEyelashes,
     THERIGMOD_PT_FaceMouth,
     THERIGMOD_PT_FaceSettings,
     THERIGMOD_PT_BodyPanel,
@@ -975,7 +913,6 @@ classes = [
     THERIGMOD_PT_SettingsPanel,
     THERIGMOD_PT_TaperPanel,
     THERIGMOD_PT_ArmorPanel,
-    THERIGMOD_PT_ExtrudePanel,
 ]
 
 

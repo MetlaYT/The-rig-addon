@@ -7,6 +7,7 @@
 ## ✨ Features
 
 - 🧍 **Quick rig addition** 
+- 🧍 **Load custom rigs** 
 - 👁️ **Face control**
 
 ## 📦 Available Rigs
@@ -35,7 +36,7 @@
 - **Addon Author:** Metla
 - **Rig Author:** TheRatmir
 - **Modified Rig Author:** Zealum
-- **Version:** 2.0.0
+- **Version:** 2.1.0
 
 ## 🎯 Usage
 
