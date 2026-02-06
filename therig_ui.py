@@ -587,8 +587,8 @@ class THERIG_PT_FaceSettings(bpy.types.Panel):
         
         col = layout.column(align=True)
         
-        if "1px eyes" in bone:
-            col.prop(bone, '["1px eyes"]', text="1px Eyes")
+        if "1px Eyes" in bone:
+            col.prop(bone, '["1px Eyes"]', text="1px Eyes")
         if "2px Pupils" in bone:
             col.prop(bone, '["2px Pupils"]', text="2px Pupils")
         if "Simple Pupils" in bone:
@@ -702,10 +702,10 @@ class THERIG_PT_LegsPanel(bpy.types.Panel):
         layout.separator()
         
         row = layout.row(align=True)
-        if r_bone and "IK/FK" in r_bone:
-            row.prop(r_bone, '["IK/FK"]', text="IK/FK")
-        if l_bone and "IK/FK" in l_bone:
-            row.prop(l_bone, '["IK/FK"]', text="IK/FK")
+        if r_bone and "FK/IK" in r_bone:
+            row.prop(r_bone, '["FK/IK"]', text="FK/IK")
+        if l_bone and "FK/IK" in l_bone:
+            row.prop(l_bone, '["FK/IK"]', text="FK/IK")
         
         row = layout.row(align=True)
         if r_bone and "Ankle Lock" in r_bone:

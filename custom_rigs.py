@@ -7,12 +7,24 @@ from bpy.props import StringProperty, EnumProperty, CollectionProperty, IntPrope
 from bpy.types import PropertyGroup, Operator, AddonPreferences
 from bpy_extras.io_utils import ImportHelper, ExportHelper
 
-# Путь к файлу с данными о кастомных ригах
-def get_custom_rigs_file():
-    return os.path.join(os.path.dirname(__file__), "assets", "custom_rigs.json")
-
+# Путь к файлу с данными о кастомных ригах (в пользовательской папке Blender)
 def get_custom_rigs_folder():
-    return os.path.join(os.path.dirname(__file__), "assets", "custom")
+    """Получить папку для хранения кастомных ригов в пользовательской директории"""
+    user_path = bpy.utils.resource_path('USER')
+    custom_folder = os.path.join(user_path, "scripts", "addons_contrib", "therig_custom")
+    if not os.path.exists(custom_folder):
+        os.makedirs(custom_folder)
+    return custom_folder
+
+def get_custom_rigs_file():
+    return os.path.join(get_custom_rigs_folder(), "custom_rigs.json")
+
+def get_custom_blends_folder():
+    """Папка для .blend файлов кастомных ригов"""
+    folder = os.path.join(get_custom_rigs_folder(), "blends")
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+    return folder
 
 def load_custom_rigs():
     """Загрузить список кастомных ригов из JSON"""
@@ -135,9 +147,7 @@ class THRIG_OT_AddCustomRig(Operator):
             return {'CANCELLED'}
         
         # Создаём папку для кастомных ригов если её нет
-        custom_folder = get_custom_rigs_folder()
-        if not os.path.exists(custom_folder):
-            os.makedirs(custom_folder)
+        custom_folder = get_custom_blends_folder()
         
         # Новое имя для файла и коллекции
         new_collection_name = f"{self.rig_name}(Append)"
@@ -207,7 +217,7 @@ class THRIG_OT_RemoveCustomRig(Operator):
             return {'CANCELLED'}
         
         # Удаляем файл
-        custom_folder = get_custom_rigs_folder()
+        custom_folder = get_custom_blends_folder()
         filepath = os.path.join(custom_folder, rig_to_remove['filename'])
         
         try:
@@ -285,7 +295,7 @@ class THRIG_OT_AppendCustomRig(Operator):
             self.report({'ERROR'}, f"Rig '{self.rig_name}' not found!")
             return {'CANCELLED'}
         
-        custom_folder = get_custom_rigs_folder()
+        custom_folder = get_custom_blends_folder()
         filepath = os.path.join(custom_folder, rig_data['filename'])
         
         if not os.path.exists(filepath):
@@ -350,7 +360,7 @@ class THRIG_OT_ExportCustomRig(Operator, ExportHelper):
             self.report({'ERROR'}, f"Rig '{self.rig_name}' not found!")
             return {'CANCELLED'}
         
-        custom_folder = get_custom_rigs_folder()
+        custom_folder = get_custom_blends_folder()
         blend_filepath = os.path.join(custom_folder, rig_data['filename'])
         
         if not os.path.exists(blend_filepath):
@@ -397,9 +407,7 @@ class THRIG_OT_ImportCustomRig(Operator, ImportHelper):
             self.report({'ERROR'}, "File not found!")
             return {'CANCELLED'}
         
-        custom_folder = get_custom_rigs_folder()
-        if not os.path.exists(custom_folder):
-            os.makedirs(custom_folder)
+        custom_folder = get_custom_blends_folder()
         
         try:
             with zipfile.ZipFile(self.filepath, 'r') as zipf:

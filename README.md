@@ -49,6 +49,7 @@
 ## 🙏 Acknowledgments
 
 - [TheRatmir](https://theratmir.github.io/TheRatmir-Portfolio/) — author of the original rigs
+- [Aspirata](https://discord.gg/3Avu93Vecj) — Optimize
 - [Zealum](https://t.me/Zealum2) — author of the modified rig
 
 ---
