@@ -91,6 +91,13 @@ def get_therig_bone(context):
     return None
 
 
+def get_face_simplify_bone(context):
+    rig = context.active_object
+    if rig and rig.type == 'ARMATURE':
+        return rig.pose.bones.get("Face_Simplify")
+    return None
+
+
 def get_icon(icon_name):
     from . import operators
     return operators.get_icon(icon_name)
@@ -873,6 +880,35 @@ class THERIG_PT_SettingsPanel(bpy.types.Panel):
                 layout.prop(rig_bone, '["Bevel Amount"]', text="Bevel Amount")
 
 
+class THERIG_PT_SimplePanel(bpy.types.Panel):
+    bl_label = "Simple"
+    bl_idname = "THERIG_PT_simple"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "TheRig"
+    bl_parent_id = "THERIG_PT_settings"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        return is_this_rig(context) and get_face_simplify_bone(context)
+
+    def draw(self, context):
+        layout = self.layout
+        bone = get_face_simplify_bone(context)
+        
+        if not bone:
+            layout.label(text="Face_Simplify bone not found", icon='ERROR')
+            return
+        
+        col = layout.column(align=True)
+        
+        for key in bone.keys():
+            if key.startswith("_"):
+                continue
+            col.prop(bone, f'["{key}"]', text=key)
+
+
 classes = [
     THERIG_OT_DownloadSkin,
     THERIG_OT_ChangeSkin,
@@ -889,6 +925,7 @@ classes = [
     THERIG_PT_ArmsPanel,
     THERIG_PT_LegsPanel,
     THERIG_PT_SettingsPanel,
+    THERIG_PT_SimplePanel,
     THERIG_PT_TaperPanel,
     THERIG_PT_ArmorPanel,
 ]
