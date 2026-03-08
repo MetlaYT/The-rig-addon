@@ -50,7 +50,8 @@
 
 - [TheRatmir](https://theratmir.github.io/TheRatmir-Portfolio/) — автор оригинальных ригов
 - [Aspirata](https://discord.gg/3Avu93Vecj) — Оптимизация
-- [Zealum](https://t.me/Zealum2) — автор модифицированого рига
+- [Zealum](https://t.me/Zealum2) — автор модифицированого ригам
+- [LibrarianTEAM](https://t.me/libraryminecraft) — автор рига с ботинками
 
 ---
 

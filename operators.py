@@ -139,6 +139,29 @@ class THCAMERA_OT_AppendCamera(bpy.types.Operator):
             self.report({'ERROR'}, str(e))
             return {'CANCELLED'}
 
+
+class THRIGBOOT_OT_AppendBoot(bpy.types.Operator):
+    bl_idname = "thrigboot.append_boot"
+    bl_label = "THE BOOT"
+    bl_description = "Add THE BOOT character to the scene"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        blend_file = get_asset_path("TheRigBoot.blend")
+        collection_name = "TheRig[boots](Append)"
+        try:
+            bpy.ops.wm.append(
+                filepath=os.path.join(blend_file, "Collection", collection_name),
+                directory=os.path.join(blend_file, "Collection"),
+                filename=collection_name
+            )
+            self.report({'INFO'}, f"Added {collection_name}")
+            return {'FINISHED'}
+        except Exception as e:
+            self.report({'ERROR'}, f"Failed: {str(e)}. File: {blend_file}, Collection: {collection_name}")
+            return {'CANCELLED'}
+
+
 class THRIG_OT_ChangeSkin(bpy.types.Operator):
     bl_idname = "thrig.change_skin"
     bl_label = "Change Skin"
@@ -215,6 +238,7 @@ def menu_func_armature(self, context):
     self.layout.operator(THSIMPLE_OT_AppendSimple.bl_idname, text="THE SIMPLE", icon_value=get_icon('thesimpleicon'))
     self.layout.operator(THBUFF_OT_AppendBuff.bl_idname, text="THE BUFF", icon_value=get_icon('thebufficon'))
     self.layout.operator(THCAMERA_OT_AppendCamera.bl_idname, text="THE CAMERA", icon='CAMERA_DATA')
+    self.layout.operator(THRIGBOOT_OT_AppendBoot.bl_idname, text="TheRigBoot", icon='ARMATURE_DATA')
 
 
 def menu_func_root(self, context):
@@ -225,6 +249,7 @@ def menu_func_root(self, context):
     self.layout.operator(THSIMPLE_OT_AppendSimple.bl_idname, text="THE SIMPLE", icon_value=get_icon('thesimpleicon'))
     self.layout.operator(THBUFF_OT_AppendBuff.bl_idname, text="THE BUFF", icon_value=get_icon('thebufficon'))
     self.layout.operator(THCAMERA_OT_AppendCamera.bl_idname, text="THE CAMERA", icon='CAMERA_DATA')
+    self.layout.operator(THRIGBOOT_OT_AppendBoot.bl_idname, text="TheRigBoot", icon='ARMATURE_DATA')
 
 class THRIG_OT_ShowFace(bpy.types.Operator):
     bl_idname = "thrig.show_face"
@@ -297,6 +322,7 @@ def register():
     bpy.utils.register_class(THSIMPLE_OT_AppendSimple)
     bpy.utils.register_class(THBUFF_OT_AppendBuff)
     bpy.utils.register_class(THCAMERA_OT_AppendCamera)
+    bpy.utils.register_class(THRIGBOOT_OT_AppendBoot)
     bpy.utils.register_class(THRIG_OT_ChangeSkin)
     bpy.utils.register_class(THRIG_OT_LoadCustomSkin)
     bpy.utils.register_class(THRIG_OT_ShowFace)
@@ -312,6 +338,7 @@ def unregister():
     bpy.utils.unregister_class(THRIG_OT_ShowFace)
     bpy.utils.unregister_class(THRIG_OT_LoadCustomSkin)
     bpy.utils.unregister_class(THRIG_OT_ChangeSkin)
+    bpy.utils.unregister_class(THRIGBOOT_OT_AppendBoot)
     bpy.utils.unregister_class(THCAMERA_OT_AppendCamera)
     bpy.utils.unregister_class(THBUFF_OT_AppendBuff)
     bpy.utils.unregister_class(THSIMPLE_OT_AppendSimple)

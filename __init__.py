@@ -4,7 +4,7 @@ from . import operators, ui, updater, custom_rigs
 bl_info = {
     "name": "The Rig addon",
     "author": "Metla",
-    "version": (2, 1, 1),
+    "version": (2, 1, 2),
     "blender": (4, 5, 0),
     "location": "Shift+A > Armature, View3D > Sidebar",
     "description": "An addon to easily use The rig and you can easily use The Plush from the author TheRatmir ",

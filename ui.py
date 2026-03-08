@@ -7,6 +7,7 @@ from . import theplush_ui
 from . import thesimple_ui
 from . import thebuff_ui
 from . import thecamera_ui
+from . import therigboot_ui
 
 
 def register():
@@ -16,9 +17,11 @@ def register():
     thesimple_ui.register()
     thebuff_ui.register()
     thecamera_ui.register()
+    therigboot_ui.register()
 
 
 def unregister():
+    therigboot_ui.unregister()
     thecamera_ui.unregister()
     thebuff_ui.unregister()
     thesimple_ui.unregister()
